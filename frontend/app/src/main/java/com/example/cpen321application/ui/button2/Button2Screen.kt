@@ -3,6 +3,7 @@ package com.example.cpen321application.ui.button2
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -77,10 +78,13 @@ fun Button2Screen(apiBaseUrl: String, onBack: () -> Unit, modifier: Modifier = M
             Text(text = error)
         }
 
+        Text("Pixel Art:")
+
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
+                .border(2.dp, Color.Black)
         ) {
             val cellSize = Size(size.width / GRID_SIZE, size.height / GRID_SIZE)
             for (y in 0 until GRID_SIZE) {

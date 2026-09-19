@@ -55,6 +55,7 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var joke by remember { mutableStateOf<Joke?>(null) }
     var punchlineShown by remember { mutableStateOf(false) }
     var jokeRequest by remember { mutableIntStateOf(0) }
+    var giftOpened by remember { mutableStateOf(false) }
 
     // Counts down once per second while the timer is running.
     LaunchedEffect(phase) {
@@ -104,6 +105,7 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
                         } else {
                             inputError = null
                             remainingSeconds = total
+                            giftOpened = false
                             phase = TimerPhase.RUNNING
                         }
                     },
@@ -126,21 +128,41 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
             }
 
             TimerPhase.DONE -> {
-                Text(
-                    text = "Time's up! Here's a surprise:",
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                JokeCard(joke = joke, punchlineShown = punchlineShown, onReveal = { punchlineShown = true })
-                Button(onClick = { jokeRequest++ }, modifier = Modifier.fillMaxWidth()) {
-                    Text("Another one!")
+                if (!giftOpened) {
+                    GiftBox(onOpen = { giftOpened = true })
+                } else {
+                    Text(
+                        text = "Time's up! Here's a surprise:",
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    JokeCard(joke = joke, punchlineShown = punchlineShown, onReveal = { punchlineShown = true })
+                    Button(onClick = { jokeRequest++ }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Another one!")
+                    }
                 }
                 OutlinedButton(onClick = { phase = TimerPhase.SETUP }, modifier = Modifier.fillMaxWidth()) {
                     Text("New timer")
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun GiftBox(onOpen: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 48.dp)
+            .clickable(onClick = onOpen),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(text = "\uD83C\uDF81", fontSize = 120.sp)
+        Text(text = "???", style = MaterialTheme.typography.displayMedium)
+        Text(text = "Tap to open your surprise", style = MaterialTheme.typography.bodyMedium)
     }
 }
 

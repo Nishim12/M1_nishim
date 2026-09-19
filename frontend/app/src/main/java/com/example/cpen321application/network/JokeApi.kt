@@ -5,6 +5,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 import org.json.JSONObject
 
 data class Joke(val setup: String, val punchline: String)
@@ -33,8 +34,12 @@ suspend fun fetchRandomJoke(): Joke = withContext(Dispatchers.IO) {
             throw IOException("Joke request failed with HTTP $code")
         }
         val body = connection.inputStream.bufferedReader().use { it.readText() }
-        val json = JSONObject(body)
-        Joke(setup = json.getString("setup"), punchline = json.getString("punchline"))
+        try {
+            val json = JSONObject(body)
+            Joke(setup = json.getString("setup"), punchline = json.getString("punchline"))
+        } catch (e: JSONException) {
+            throw IOException("Unexpected joke response", e)
+        }
     } finally {
         connection.disconnect()
     }
