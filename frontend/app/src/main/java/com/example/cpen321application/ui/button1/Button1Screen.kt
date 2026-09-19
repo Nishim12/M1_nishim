@@ -3,11 +3,10 @@ package com.example.cpen321application.ui.button1
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -111,23 +110,16 @@ fun Button1Screen(apiBaseUrl: String, googleClientId: String, onBack: () -> Unit
         }
 
         if (uiState.isSignedIn) {
-            LabeledValue("Server IP address:", uiState.serverIp)
-            LabeledValue("Client IP address:", uiState.clientIp)
-            Spacer(modifier = Modifier.height(8.dp))
-            LabeledValue("Server local time:", uiState.serverTime)
-            LabeledValue("Client local time:", uiState.clientTime)
-            Spacer(modifier = Modifier.height(8.dp))
-            LabeledValue("Your name:", uiState.developerName)
-            LabeledValue("Logged in as:", uiState.signedInUserName)
+            Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Server IP address: ${uiState.serverIp ?: "-"}")
+                    Text("Client IP address: ${uiState.clientIp ?: "-"}")
+                    Text("Server local time: ${uiState.serverTime ?: "-"}")
+                    Text("Client local time: ${uiState.clientTime ?: "-"}")
+                    Text("Your name: ${uiState.developerName ?: "-"}")
+                    Text("Logged in as: ${uiState.signedInUserName ?: "-"}")
+                }
+            }
         }
-    }
-}
-
-// Label on one line, value below it; a trailing " GMT+hh:mm" moves to its own line.
-@Composable
-private fun LabeledValue(label: String, value: String?) {
-    Column {
-        Text(label)
-        Text((value ?: "-").replace(" GMT", "\nGMT"))
     }
 }
