@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,7 @@ fun Button1Screen(apiBaseUrl: String, googleClientId: String, onBack: () -> Unit
             if (user == null) {
                 uiState = uiState.copy(
                     isLoading = false,
-                    error = "Sign-in failed: ${userResult.exceptionOrNull()?.message ?: "unknown error"}"
+                    error = "Sign-in failed. Please try again."
                 )
                 return@launch
             }
@@ -77,7 +78,7 @@ fun Button1Screen(apiBaseUrl: String, googleClientId: String, onBack: () -> Unit
             } catch (e: IOException) {
                 uiState = uiState.copy(
                     isLoading = false,
-                    error = "Backend request failed: ${e.message}",
+                    error = "Couldn't reach the server. Please try again.",
                     signedInUserName = signedInName
                 )
             }
@@ -101,7 +102,7 @@ fun Button1Screen(apiBaseUrl: String, googleClientId: String, onBack: () -> Unit
         }
 
         if (uiState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
 
         uiState.error?.let { error ->
