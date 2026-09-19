@@ -9,7 +9,7 @@ const RECONNECT_DELAY_MS = 1000;
 // Relays the course-provided pixel stream to our own Socket.io clients
 // verbatim, with no batching, delay, or reformatting, per Button 2's spec.
 export function attachLiveUpdates(server: HttpServer | HttpsServer): void {
-  const io = new SocketIOServer(server, { cors: { origin: '*' } });
+  const io = new SocketIOServer(server);
 
   const connect = (): void => {
     const upstream = new WebSocket(COURSE_PIXEL_STREAM_URL);
