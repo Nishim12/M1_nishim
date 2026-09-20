@@ -44,8 +44,21 @@ android {
         )
     }
 
+    // Shared debug key so every build (debug or release) has the same SHA-1 and
+    // Google Sign-In works for anyone who builds the app. It is a throwaway key
+    // (password "android"), not a production secret.
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
