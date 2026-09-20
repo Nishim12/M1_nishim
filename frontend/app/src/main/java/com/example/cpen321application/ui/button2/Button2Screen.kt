@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -32,7 +31,7 @@ private const val GRID_SIZE = 16
 private val BLANK_CELL_COLOR = Color.White
 
 @Composable
-fun Button2Screen(apiBaseUrl: String, onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun Button2Screen(apiBaseUrl: String, modifier: Modifier = Modifier) {
     val cells = remember { mutableStateListOf(*Array(GRID_SIZE * GRID_SIZE) { BLANK_CELL_COLOR }) }
     var connectionError by remember { mutableStateOf<String?>(null) }
 
@@ -70,10 +69,6 @@ fun Button2Screen(apiBaseUrl: String, onBack: () -> Unit, modifier: Modifier = M
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        OutlinedButton(onClick = onBack) {
-            Text("Back")
-        }
-
         connectionError?.let { error ->
             Text(text = error)
         }

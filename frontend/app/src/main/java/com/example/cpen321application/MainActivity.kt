@@ -1,5 +1,7 @@
 package com.example.cpen321application
 
+import com.example.cpen321application.ui.theme.AppButtonShape
+import androidx.activity.compose.BackHandler
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,8 +10,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.cpen321application.ui.button1.Button1Screen
 import com.example.cpen321application.ui.button2.Button2Screen
 import com.example.cpen321application.ui.button3.Button3Screen
@@ -45,6 +51,8 @@ class MainActivity : ComponentActivity() {
 private fun AppRoot(modifier: Modifier = Modifier) {
     var screen by remember { mutableStateOf(Screen.HOME) }
 
+    BackHandler(enabled = screen != Screen.HOME) { screen = Screen.HOME }
+
     when (screen) {
         Screen.HOME -> HomeScreen(
             onButton1Click = { screen = Screen.BUTTON1 },
@@ -55,16 +63,13 @@ private fun AppRoot(modifier: Modifier = Modifier) {
         Screen.BUTTON1 -> Button1Screen(
             apiBaseUrl = BuildConfig.API_BASE_URL,
             googleClientId = BuildConfig.GOOGLE_CLIENT_ID,
-            onBack = { screen = Screen.HOME },
             modifier = modifier
         )
         Screen.BUTTON2 -> Button2Screen(
             apiBaseUrl = BuildConfig.API_BASE_URL,
-            onBack = { screen = Screen.HOME },
             modifier = modifier
         )
         Screen.BUTTON3 -> Button3Screen(
-            onBack = { screen = Screen.HOME },
             modifier = modifier
         )
     }
@@ -80,18 +85,26 @@ private fun HomeScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = onButton1Click, modifier = Modifier.fillMaxWidth()) {
-            Text("Login + Server")
-        }
-        Button(onClick = onButton2Click, modifier = Modifier.fillMaxWidth()) {
-            Text("Live Updates")
-        }
-        Button(onClick = onButton3Click, modifier = Modifier.fillMaxWidth()) {
-            Text("Timer")
-        }
+        HomeButton("Login + Server", onButton1Click)
+        HomeButton("Live Updates", onButton2Click)
+        HomeButton("Timer", onButton3Click)
+    }
+}
+
+@Composable
+private fun HomeButton(label: String, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp),
+        shape = AppButtonShape,
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp, pressedElevation = 1.dp)
+    ) {
+        Text(label, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
     }
 }

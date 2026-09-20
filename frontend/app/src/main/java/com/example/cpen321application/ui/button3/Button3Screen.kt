@@ -1,5 +1,7 @@
 package com.example.cpen321application.ui.button3
 
+import com.example.cpen321application.ui.theme.AppButtonShape
+import androidx.compose.foundation.layout.height
 import android.content.Context
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -44,7 +46,7 @@ private const val VIBRATION_MS = 500L
 private enum class TimerPhase { SETUP, RUNNING, DONE }
 
 @Composable
-fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun Button3Screen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var phase by remember { mutableStateOf(TimerPhase.SETUP) }
     var minutesInput by remember { mutableStateOf("") }
@@ -86,10 +88,6 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        OutlinedButton(onClick = onBack) {
-            Text("Back")
-        }
-
         when (phase) {
             TimerPhase.SETUP -> {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -109,7 +107,8 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
                             phase = TimerPhase.RUNNING
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    shape = AppButtonShape
                 ) {
                     Text("Start")
                 }
@@ -122,7 +121,7 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedButton(onClick = { phase = TimerPhase.SETUP }, modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(onClick = { phase = TimerPhase.SETUP }, modifier = Modifier.fillMaxWidth().height(56.dp), shape = AppButtonShape) {
                     Text("Cancel")
                 }
             }
@@ -138,11 +137,11 @@ fun Button3Screen(onBack: () -> Unit, modifier: Modifier = Modifier) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     JokeCard(joke = joke, punchlineShown = punchlineShown, onReveal = { punchlineShown = true })
-                    Button(onClick = { jokeRequest++ }, modifier = Modifier.fillMaxWidth()) {
+                    Button(onClick = { jokeRequest++ }, modifier = Modifier.fillMaxWidth().height(56.dp), shape = AppButtonShape) {
                         Text("Another one!")
                     }
                 }
-                OutlinedButton(onClick = { phase = TimerPhase.SETUP }, modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(onClick = { phase = TimerPhase.SETUP }, modifier = Modifier.fillMaxWidth().height(56.dp), shape = AppButtonShape) {
                     Text("New timer")
                 }
             }
