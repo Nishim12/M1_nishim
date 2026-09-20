@@ -21,7 +21,19 @@ die()   { printf '\033[31mERROR:\033[0m %s\n' "$*" >&2; exit 1; }
 # ---------------------------------------------------------------------------
 # Prerequisites
 # ---------------------------------------------------------------------------
-command -v java >/dev/null 2>&1 || die "Java not found."
+# A JDK is required by Gradle. On macOS, `java` can exist as a stub that fails,
+# so fall back to the JDK bundled with Android Studio if no working java is found.
+if ! java -version >/dev/null 2>&1; then
+  for jbr in "/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
+             "/opt/android-studio/jbr" "$HOME/android-studio/jbr"; do
+    if [[ -x "$jbr/bin/java" ]]; then
+      export JAVA_HOME="$jbr"
+      export PATH="$JAVA_HOME/bin:$PATH"
+      break
+    fi
+  done
+fi
+java -version >/dev/null 2>&1 || die "Java not found. Install Java 17 or Android Studio."
 
 [[ -f "$FRONTEND_DIR/local.properties" ]] || die "Missing $FRONTEND_DIR/local.properties."
 [[ -x "$FRONTEND_DIR/gradlew" ]] || die "Missing $FRONTEND_DIR/gradlew."

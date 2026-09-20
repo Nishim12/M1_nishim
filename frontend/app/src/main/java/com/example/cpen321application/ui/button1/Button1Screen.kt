@@ -1,5 +1,7 @@
 package com.example.cpen321application.ui.button1
 
+import com.example.cpen321application.ui.theme.AppButtonShape
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,7 +42,7 @@ private data class Button1UiState(
 }
 
 @Composable
-fun Button1Screen(apiBaseUrl: String, googleClientId: String, onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun Button1Screen(apiBaseUrl: String, googleClientId: String, modifier: Modifier = Modifier) {
     var uiState by remember { mutableStateOf(Button1UiState()) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -91,12 +92,8 @@ fun Button1Screen(apiBaseUrl: String, googleClientId: String, onBack: () -> Unit
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        OutlinedButton(onClick = onBack) {
-            Text("Back")
-        }
-
         if (!uiState.isSignedIn) {
-            Button(onClick = { signInAndLoad() }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { signInAndLoad() }, modifier = Modifier.fillMaxWidth().height(56.dp), shape = AppButtonShape) {
                 Text("Sign in with Google")
             }
         }
