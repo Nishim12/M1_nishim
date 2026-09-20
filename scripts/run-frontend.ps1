@@ -30,7 +30,16 @@ function Die($msg)  { Write-Host "ERROR: $msg" -ForegroundColor Red; exit 1 }
 # Prerequisites
 # ---------------------------------------------------------------------------
 
-if (-not (Get-Command java -ErrorAction SilentlyContinue))  { Die "Java not found." }
+if (-not (Get-Command java -ErrorAction SilentlyContinue)) {
+    # Fall back to the JDK bundled with Android Studio.
+    $jbr = "$env:ProgramFiles\Android\Android Studio\jbr"
+    if (Test-Path "$jbr\bin\java.exe") {
+        $env:JAVA_HOME = $jbr
+        $env:PATH = "$jbr\bin;$env:PATH"
+    } else {
+        Die "Java not found. Install Java 17 or Android Studio."
+    }
+}
 
 if (-not (Test-Path (Join-Path $FrontendDir 'local.properties'))) { Die "Missing $FrontendDir\local.properties." }
 
