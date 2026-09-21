@@ -42,6 +42,13 @@ Install the following before the frontend or backend setup steps:
 - **Debug build**: Click the green play button in the toolbar, to compile the code, package a debug APK, and install it on the connected device or running emulator.
 - **Script**: From the project root, run `./scripts/run-frontend.sh` (macOS/Linux) or `.\scripts\run-frontend.ps1` (Windows). It starts the emulator if none is running, then builds, installs and launches the app. The emulator defaults to an AVD named `Pixel_9`; use another with `AVD_NAME=YourAvdName ./scripts/run-frontend.sh` (PowerShell: `$env:AVD_NAME = 'YourAvdName'; .\scripts\run-frontend.ps1`).
 - **Release build**: From `frontend/`, run `./gradlew assembleRelease`. The APK is written to `frontend/app/build/outputs/apk/release/app-release.apk` and is signed with the shared debug key at `frontend/app/debug.keystore` (SHA-1 `07:F2:24:33:6A:E2:5D:C1:2F:71:A1:55:82:7E:73:AE:B5:C3:51:1E`), the same key used by debug builds. That SHA-1 is already registered on the Google project, so Google Sign-In works for any build made from this repository. Install it with `adb install -r app/build/outputs/apk/release/app-release.apk`.
+  - To confirm the signing key, run `apksigner`, which needs Java. If the terminal reports "Unable to locate a Java Runtime", point it at Android Studio's bundled JDK first (the exports last only for that terminal window):
+    ```
+    export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+    export PATH="$JAVA_HOME/bin:$PATH"
+    ~/Library/Android/sdk/build-tools/36.0.0/apksigner verify --print-certs app/build/outputs/apk/release/app-release.apk | grep SHA-1
+    ```
+    Expected output: `Signer #1 certificate SHA-1 digest: 07f224336ae25dc12f71a155827e73aeb5c3511e`.
 
 
 ### Backend Configuration
